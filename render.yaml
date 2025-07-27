@@ -7,7 +7,7 @@ databases:
 services:
   - type: web
     name: diama-backend
-    runtime: php
+    runtime: docker
     plan: free
     buildCommand: |
       composer install --no-dev --optimize-autoloader
@@ -80,7 +80,7 @@ services:
 
   - type: web
     name: diama-frontend
-    env: static
+    runtime: static
     plan: free
     buildCommand: |
       npm install
