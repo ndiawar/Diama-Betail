@@ -78,7 +78,7 @@ services:
   - type: web
     name: diama-frontend
     runtime: static
-    plan: starter
+    plan: standard
     buildCommand: |
       npm install
       npm run build
