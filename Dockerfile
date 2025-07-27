@@ -9,5 +9,5 @@ WORKDIR /app
 # Exposer le port
 EXPOSE $PORT
 
-# Commande de démarrage
-CMD php artisan serve --host 0.0.0.0 --port $PORT 
+# Script de démarrage qui inclut la migration
+CMD php artisan migrate --force && php artisan serve --host 0.0.0.0 --port $PORT 
