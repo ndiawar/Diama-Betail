@@ -56,7 +56,17 @@ if (mainCssPath && fs.existsSync(mainCssPath)) {
     console.error(`Fichier CSS source non trouvé: ${mainCssPath}`);
 }
 
-// Générer le HTML avec les noms fixes
+// Vérifier si les fichiers fixes existent, sinon utiliser les originaux
+const fixedJsPath = path.join(buildDir, 'main.js');
+const fixedCssPath = path.join(buildDir, 'main.css');
+
+const finalJsFile = fs.existsSync(fixedJsPath) ? 'assets/main.js' : mainJsFile;
+const finalCssFile = fs.existsSync(fixedCssPath) ? 'assets/main.css' : mainCssFile;
+
+console.log('Final JS file:', finalJsFile);
+console.log('Final CSS file:', finalCssFile);
+
+// Générer le HTML avec les noms de fichiers appropriés
 const html = `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -66,11 +76,11 @@ const html = `<!DOCTYPE html>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="stylesheet" href="/build/assets/main.css">
+    <link rel="stylesheet" href="/build/${finalCssFile}">
 </head>
 <body>
     <div id="root"></div>
-    <script type="module" src="/build/assets/main.js"></script>
+    <script type="module" src="/build/${finalJsFile}"></script>
 </body>
 </html>`;
 
