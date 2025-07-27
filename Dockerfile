@@ -33,8 +33,12 @@ RUN chown -R www-data:www-data /var/www/html \
 RUN a2enmod rewrite
 COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
 
+# Copier le script de démarrage
+COPY docker/start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
 # Exposer le port
 EXPOSE 80
 
 # Script de démarrage
-CMD php artisan migrate --force && apache2-foreground 
+CMD ["/usr/local/bin/start.sh"] 
