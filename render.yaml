@@ -1,0 +1,87 @@
+databases:
+  - name: diama-db
+    databaseName: diama
+    user: diama
+    plan: free
+
+services:
+  - type: web
+    name: diama-backend
+    env: php
+    plan: free
+    buildCommand: |
+      composer install --no-dev --optimize-autoloader
+      php artisan key:generate
+      php artisan config:cache
+      php artisan route:cache
+      php artisan view:cache
+    startCommand: |
+      php artisan migrate --force
+      php artisan serve --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        value: https://diama-backend.onrender.com
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: diama-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: diama-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: diama-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: diama-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: diama-db
+          property: password
+      - key: BROADCAST_DRIVER
+        value: log
+      - key: CACHE_DRIVER
+        value: file
+      - key: FILESYSTEM_DISK
+        value: local
+      - key: LOG_CHANNEL
+        value: stack
+      - key: LOG_LEVEL
+        value: debug
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: SESSION_DRIVER
+        value: file
+      - key: SESSION_LIFETIME
+        value: 120
+
+  - type: web
+    name: diama-frontend
+    env: static
+    plan: free
+    buildCommand: |
+      npm install
+      npm run build
+    staticPublishPath: ./public/build
+    envVars:
+      - key: VITE_API_URL
+        value: https://diama-backend.onrender.com
+      - key: VITE_PUSHER_APP_KEY
+        value: da023cbd84a0d6e8816b615aafc7e1fd
+      - key: VITE_PUSHER_APP_CLUSTER
+        value: mt1
+      - key: VITE_PUSHER_HOST
+        value: diama-backend.onrender.com
+      - key: VITE_PUSHER_PORT
+        value: 443
+      - key: VITE_PUSHER_SCHEME
+        value: https 
