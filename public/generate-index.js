@@ -24,8 +24,8 @@ const mainEntry = Object.values(manifest).find(entry => entry.isEntry);
 console.log('Main entry:', mainEntry);
 
 // Utiliser les noms de fichiers qui existent sur Render
-const mainJsFile = 'assets/main-DBvmTE74.js';
-const mainCssFile = 'assets/main-SmF9zt_D.css';
+const mainJsFile = mainEntry ? mainEntry.file : '';
+const mainCssFile = mainEntry && mainEntry.css ? mainEntry.css[0] : '';
 
 console.log('Main JS file:', mainJsFile);
 console.log('Main CSS file:', mainCssFile);
@@ -40,7 +40,7 @@ const html = `<!DOCTYPE html>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="stylesheet" href="/build/${mainCssFile}">
+    ${mainCssFile ? `<link rel="stylesheet" href="/build/${mainCssFile}">` : ''}
 </head>
 <body>
     <div id="root"></div>
