@@ -27,6 +27,19 @@ console.log('Main entry:', mainEntry);
 const mainJsFile = mainEntry ? mainEntry.file : '';
 const mainCssFile = mainEntry && mainEntry.css ? mainEntry.css[0] : '';
 
+// Vérifier que le fichier JS existe réellement
+const jsFilePath = path.join(__dirname, 'build', mainJsFile);
+if (!fs.existsSync(jsFilePath)) {
+    console.error(`Fichier JS non trouvé: ${jsFilePath}`);
+    console.log('Fichiers disponibles dans build/assets:');
+    const assetsDir = path.join(__dirname, 'build', 'assets');
+    if (fs.existsSync(assetsDir)) {
+        const files = fs.readdirSync(assetsDir);
+        files.forEach(file => console.log(`  - ${file}`));
+    }
+    process.exit(1);
+}
+
 console.log('Main JS file:', mainJsFile);
 console.log('Main CSS file:', mainCssFile);
 
