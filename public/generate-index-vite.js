@@ -28,7 +28,7 @@ console.log('Fichiers disponibles dans assets:', files);
 
 // Vérifier que app.js existe
 const appJsPath = path.join(assetsDir, 'app.js');
-const appCssPath = path.join(assetsDir, 'app.css');
+const mainCssPath = path.join(assetsDir, 'main.css');
 
 if (!fs.existsSync(appJsPath)) {
     console.error('Fichier app.js non trouvé !');
@@ -38,9 +38,9 @@ if (!fs.existsSync(appJsPath)) {
 
 console.log('Fichier app.js trouvé !');
 
-// Vérifier si app.css existe
-const hasAppCss = fs.existsSync(appCssPath);
-console.log('Fichier app.css trouvé:', hasAppCss);
+// Vérifier si main.css existe (selon le manifest)
+const hasMainCss = fs.existsSync(mainCssPath);
+console.log('Fichier main.css trouvé:', hasMainCss);
 
 // Générer le HTML avec les noms de fichiers fixes
 const html = `<!DOCTYPE html>
@@ -52,7 +52,7 @@ const html = `<!DOCTYPE html>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    ${hasAppCss ? '<link rel="stylesheet" href="/build/assets/app.css">' : ''}
+    ${hasMainCss ? '<link rel="stylesheet" href="/build/assets/main.css">' : ''}
 </head>
 <body>
     <div id="root"></div>
@@ -64,4 +64,4 @@ const html = `<!DOCTYPE html>
 fs.writeFileSync(path.join(buildDir, 'index.html'), html);
 console.log('index.html généré avec succès !');
 console.log('Utilise JS: app.js');
-console.log('Utilise CSS:', hasAppCss ? 'app.css' : 'aucun'); 
+console.log('Utilise CSS:', hasMainCss ? 'main.css' : 'aucun'); 
