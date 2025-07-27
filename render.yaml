@@ -7,7 +7,7 @@ databases:
 services:
   - type: web
     name: diama-backend
-    runtime: php:8.2
+    runtime: php
     plan: free
     buildCommand: |
       composer install --no-dev --optimize-autoloader
