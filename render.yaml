@@ -81,7 +81,7 @@ services:
     buildCommand: |
       npm install
       npm run build
-      node public/generate-index.js
+      node public/generate-index-vite.js
     staticPublishPath: ./public/build
     envVars:
       - key: VITE_API_URL
