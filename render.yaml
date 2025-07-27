@@ -83,7 +83,8 @@ services:
     buildCommand: |
       npm install
       npm run build
-    staticPublishPath: ./public
+      cp public/index.html public/build/
+    staticPublishPath: ./public/build
     envVars:
       - key: VITE_API_URL
         value: https://diama-backend.onrender.com

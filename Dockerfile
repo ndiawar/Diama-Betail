@@ -22,6 +22,9 @@ WORKDIR /var/www/html
 # Copier les fichiers de l'application
 COPY . .
 
+# Créer le fichier .env s'il n'existe pas
+RUN if [ ! -f .env ]; then cp env.example .env; fi
+
 # Installer les dépendances PHP
 RUN composer install --no-dev --optimize-autoloader
 
