@@ -2,7 +2,16 @@
 function getApiBaseUrl(): string {
     try {
         // @ts-ignore - Vite environment variables
-        return import.meta.env?.VITE_API_URL || 'http://127.0.0.1:8000/api';
+        const baseUrl = import.meta.env?.VITE_API_URL || 'http://127.0.0.1:8000';
+        
+        // S'assurer que l'URL se termine par /api
+        if (baseUrl.endsWith('/api')) {
+            return baseUrl;
+        } else if (baseUrl.endsWith('/')) {
+            return baseUrl + 'api';
+        } else {
+            return baseUrl + '/api';
+        }
     } catch {
         return 'http://127.0.0.1:8000/api';
     }
