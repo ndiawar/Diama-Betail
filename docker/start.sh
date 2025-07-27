@@ -5,8 +5,13 @@ if [ ! -f .env ]; then
     cp env.example .env
 fi
 
-# Générer la clé d'application si elle n'existe pas
-php artisan key:generate --force
+# S'assurer que APP_KEY est défini
+if ! grep -q "APP_KEY=base64:" .env; then
+    # Générer une nouvelle clé d'application
+    php artisan key:generate --force
+else
+    echo "APP_KEY already exists in .env"
+fi
 
 # Exécuter les migrations
 php artisan migrate --force

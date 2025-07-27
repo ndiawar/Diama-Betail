@@ -20,8 +20,6 @@ services:
         value: production
       - key: APP_DEBUG
         value: false
-      - key: APP_KEY
-        generateValue: true
       - key: APP_URL
         value: https://diama-backend.onrender.com
       - key: DB_CONNECTION
@@ -83,7 +81,7 @@ services:
     buildCommand: |
       npm install
       npm run build
-      cp public/index.html public/build/
+      node public/generate-index.js
     staticPublishPath: ./public/build
     envVars:
       - key: VITE_API_URL
