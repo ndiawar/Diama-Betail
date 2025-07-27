@@ -14,6 +14,9 @@ const mainEntry = Object.values(manifest).find(entry => entry.isEntry);
 const mainJs = mainEntry ? mainEntry.file : 'assets/main.js';
 const mainCss = mainEntry && mainEntry.css ? mainEntry.css[0] : null;
 
+// Timestamp pour forcer le cache
+const timestamp = new Date().toISOString();
+
 // Générer le HTML
 const html = `<!DOCTYPE html>
 <html lang="fr">
@@ -24,11 +27,11 @@ const html = `<!DOCTYPE html>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    ${mainCss ? `<link rel="stylesheet" href="/build/${mainCss}">` : ''}
+    ${mainCss ? `<link rel="stylesheet" href="/build/${mainCss}?v=${timestamp}">` : ''}
 </head>
 <body>
     <div id="root"></div>
-    <script type="module" src="/build/${mainJs}"></script>
+    <script type="module" src="/build/${mainJs}?v=${timestamp}"></script>
 </body>
 </html>`;
 
