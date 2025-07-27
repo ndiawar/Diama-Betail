@@ -7,7 +7,7 @@ databases:
 services:
   - type: web
     name: diama-backend
-    runtime: php
+    runtime: php:8.2
     plan: free
     buildCommand: |
       composer install --no-dev --optimize-autoloader
@@ -63,6 +63,20 @@ services:
         value: file
       - key: SESSION_LIFETIME
         value: 120
+      - key: PUSHER_APP_ID
+        value: 1
+      - key: PUSHER_APP_KEY
+        value: da023cbd84a0d6e8816b615aafc7e1fd
+      - key: PUSHER_APP_SECRET
+        value: your-secret-key
+      - key: PUSHER_HOST
+        value: diama-backend.onrender.com
+      - key: PUSHER_PORT
+        value: 443
+      - key: PUSHER_SCHEME
+        value: https
+      - key: PUSHER_APP_CLUSTER
+        value: mt1
 
   - type: web
     name: diama-frontend
