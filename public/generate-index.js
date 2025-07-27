@@ -23,50 +23,14 @@ console.log('Manifest chargé');
 const mainEntry = Object.values(manifest).find(entry => entry.isEntry);
 console.log('Main entry:', mainEntry);
 
-const mainJsFile = mainEntry ? mainEntry.file : 'assets/main.js';
-const mainCssFile = mainEntry && mainEntry.css ? mainEntry.css[0] : null;
+// Utiliser les noms de fichiers qui existent sur Render
+const mainJsFile = 'assets/main-DBvmTE74.js';
+const mainCssFile = 'assets/main-SmF9zt_D.css';
 
 console.log('Main JS file:', mainJsFile);
 console.log('Main CSS file:', mainCssFile);
 
-// Copier les fichiers avec des noms fixes
-const buildDir = path.join(__dirname, 'build', 'assets');
-const mainJsPath = path.join(__dirname, 'build', mainJsFile);
-const mainCssPath = mainCssFile ? path.join(__dirname, 'build', mainCssFile) : null;
-
-console.log('Build dir:', buildDir);
-console.log('Main JS path:', mainJsPath);
-console.log('Main CSS path:', mainCssPath);
-
-// Copier main.js
-if (fs.existsSync(mainJsPath)) {
-    const targetJsPath = path.join(buildDir, 'main.js');
-    fs.copyFileSync(mainJsPath, targetJsPath);
-    console.log(`Copié ${mainJsFile} vers main.js`);
-} else {
-    console.error(`Fichier source non trouvé: ${mainJsPath}`);
-}
-
-// Copier main.css
-if (mainCssPath && fs.existsSync(mainCssPath)) {
-    const targetCssPath = path.join(buildDir, 'main.css');
-    fs.copyFileSync(mainCssPath, targetCssPath);
-    console.log(`Copié ${mainCssFile} vers main.css`);
-} else {
-    console.error(`Fichier CSS source non trouvé: ${mainCssPath}`);
-}
-
-// Vérifier si les fichiers fixes existent, sinon utiliser les originaux
-const fixedJsPath = path.join(buildDir, 'main.js');
-const fixedCssPath = path.join(buildDir, 'main.css');
-
-const finalJsFile = fs.existsSync(fixedJsPath) ? 'assets/main.js' : mainJsFile;
-const finalCssFile = fs.existsSync(fixedCssPath) ? 'assets/main.css' : mainCssFile;
-
-console.log('Final JS file:', finalJsFile);
-console.log('Final CSS file:', finalCssFile);
-
-// Générer le HTML avec les noms de fichiers appropriés
+// Générer le HTML avec les noms de fichiers fixes
 const html = `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -76,14 +40,16 @@ const html = `<!DOCTYPE html>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="stylesheet" href="/build/${finalCssFile}">
+    <link rel="stylesheet" href="/build/${mainCssFile}">
 </head>
 <body>
     <div id="root"></div>
-    <script type="module" src="/build/${finalJsFile}"></script>
+    <script type="module" src="/build/${mainJsFile}"></script>
 </body>
 </html>`;
 
 // Écrire le fichier index.html
 fs.writeFileSync(path.join(__dirname, 'build', 'index.html'), html);
-console.log('index.html généré avec succès !'); 
+console.log('index.html généré avec succès !');
+console.log(`Utilise JS: ${mainJsFile}`);
+console.log(`Utilise CSS: ${mainCssFile}`); 
