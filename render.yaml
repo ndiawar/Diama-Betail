@@ -75,6 +75,7 @@ services:
       - key: PUSHER_APP_CLUSTER
         value: mt1
 
+  # Frontend avec Docker - Configuration simplifiée
   - type: web
     name: diama-frontend
     runtime: docker
