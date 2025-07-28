@@ -56,8 +56,35 @@ faviconFiles.forEach(file => {
     }
 });
 
-// 4. Générer index.html avec tous les CSS nécessaires
-console.log('4. Génération de index.html...');
+// 4. Lire le manifest pour trouver tous les fichiers CSS
+console.log('4. Lecture du manifest pour les fichiers CSS...');
+const manifestPath = path.join(buildDir, 'manifest.json');
+let cssFiles = ['assets/main.css']; // CSS principal
+
+if (fs.existsSync(manifestPath)) {
+    try {
+        const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+        
+        // Chercher tous les fichiers CSS dans le manifest
+        Object.values(manifest).forEach(entry => {
+            if (entry.css && Array.isArray(entry.css)) {
+                entry.css.forEach(cssFile => {
+                    if (!cssFiles.includes(cssFile)) {
+                        cssFiles.push(cssFile);
+                        console.log(`✅ CSS trouvé: ${cssFile}`);
+                    }
+                });
+            }
+        });
+    } catch (error) {
+        console.log('⚠️  Erreur lecture manifest:', error.message);
+    }
+}
+
+// 5. Générer index.html avec tous les CSS nécessaires
+console.log('5. Génération de index.html...');
+const cssLinks = cssFiles.map(css => `    <link rel="stylesheet" href="/${css}">`).join('\n');
+
 const htmlContent = `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -67,9 +94,7 @@ const htmlContent = `<!DOCTYPE html>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="stylesheet" href="/assets/main.css">
-    <link rel="stylesheet" href="/assets/Vaches.css">
-    <link rel="stylesheet" href="/assets/Carte.css">
+${cssLinks}
 </head>
 <body>
     <div id="root"></div>
@@ -80,9 +105,9 @@ const htmlContent = `<!DOCTYPE html>
 fs.writeFileSync(path.join(buildDir, 'index.html'), htmlContent);
 console.log('✅ index.html généré');
 
-// 5. Vérifier les fichiers principaux
-console.log('5. Vérification des fichiers principaux...');
-const requiredFiles = ['index.html', 'assets/app.js', 'assets/main.css', 'assets/Vaches.css', 'assets/Carte.css'];
+// 6. Vérifier les fichiers principaux
+console.log('6. Vérification des fichiers principaux...');
+const requiredFiles = ['index.html', 'assets/app.js', ...cssFiles];
 let allFilesExist = true;
 
 requiredFiles.forEach(file => {
