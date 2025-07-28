@@ -41,8 +41,23 @@ const redirectsContent = '/*    /index.html   200';
 fs.writeFileSync(path.join(buildDir, '_redirects'), redirectsContent);
 console.log('✅ _redirects créé');
 
-// 3. Générer index.html
-console.log('3. Génération de index.html...');
+// 3. Copier les favicons
+console.log('3. Copie des favicons...');
+const faviconFiles = ['favicon.svg', 'favicon.png', 'favicon.ico'];
+faviconFiles.forEach(file => {
+    const sourcePath = path.join(__dirname, file);
+    const destPath = path.join(buildDir, file);
+    
+    if (fs.existsSync(sourcePath)) {
+        fs.copyFileSync(sourcePath, destPath);
+        console.log(`✅ ${file} copié`);
+    } else {
+        console.log(`⚠️  ${file} non trouvé`);
+    }
+});
+
+// 4. Générer index.html avec tous les CSS nécessaires
+console.log('4. Génération de index.html...');
 const htmlContent = `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -53,6 +68,8 @@ const htmlContent = `<!DOCTYPE html>
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="stylesheet" href="/assets/main.css">
+    <link rel="stylesheet" href="/assets/Vaches.css">
+    <link rel="stylesheet" href="/assets/Carte.css">
 </head>
 <body>
     <div id="root"></div>
@@ -63,9 +80,9 @@ const htmlContent = `<!DOCTYPE html>
 fs.writeFileSync(path.join(buildDir, 'index.html'), htmlContent);
 console.log('✅ index.html généré');
 
-// 4. Vérifier les fichiers principaux
-console.log('4. Vérification des fichiers principaux...');
-const requiredFiles = ['index.html', 'assets/app.js', 'assets/main.css'];
+// 5. Vérifier les fichiers principaux
+console.log('5. Vérification des fichiers principaux...');
+const requiredFiles = ['index.html', 'assets/app.js', 'assets/main.css', 'assets/Vaches.css', 'assets/Carte.css'];
 let allFilesExist = true;
 
 requiredFiles.forEach(file => {
