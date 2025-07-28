@@ -77,13 +77,8 @@ services:
 
   - type: web
     name: diama-frontend
-    runtime: static
-    buildCommand: |
-      npm install
-      npm run build
-      node public/generate-index-vite.js
-      node public/setup-build.js
-    staticPublishPath: ./public/build
+    runtime: docker
+    dockerfilePath: ./Dockerfile.frontend
     envVars:
       - key: VITE_API_URL
         value: https://diama-backend.onrender.com
