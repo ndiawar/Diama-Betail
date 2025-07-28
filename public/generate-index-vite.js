@@ -52,11 +52,11 @@ const html = `<!DOCTYPE html>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    ${hasMainCss ? '<link rel="stylesheet" href="/build/assets/main.css">' : ''}
+    ${hasMainCss ? '<link rel="stylesheet" href="/assets/main.css">' : ''}
 </head>
 <body>
     <div id="root"></div>
-    <script type="module" src="/build/assets/app.js"></script>
+    <script type="module" src="/assets/app.js"></script>
 </body>
 </html>`;
 
