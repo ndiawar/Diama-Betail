@@ -75,11 +75,15 @@ services:
       - key: PUSHER_APP_CLUSTER
         value: mt1
 
-  # Frontend avec Docker - Configuration simplifiée
+  # Frontend statique - Configuration gratuite
   - type: web
     name: diama-frontend
-    runtime: docker
-    dockerfilePath: ./Dockerfile.frontend
+    runtime: static
+    buildCommand: |
+      npm install
+      npm run build
+      node public/setup-static.js
+    staticPublishPath: ./public/build
     envVars:
       - key: VITE_API_URL
         value: https://diama-backend.onrender.com
