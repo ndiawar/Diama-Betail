@@ -16,5 +16,13 @@ fi
 # Exécuter les migrations
 php artisan migrate --force
 
+# Exécuter les seeders en production (une seule fois)
+php artisan db:seed --force
+
+# Optimiser pour la production
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
 # Démarrer Apache en premier plan
 apache2-foreground 

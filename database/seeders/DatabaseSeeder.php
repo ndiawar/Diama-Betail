@@ -12,6 +12,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Utiliser seeder optimisé selon l'environnement
+        if (app()->environment('production')) {
+            $this->call([
+                ProductionSeeder::class,
+            ]);
+        } else {
+            // Développement local - Historique complet
+            $this->call([
+                VachePositionsHistorySeeder::class,
+            ]);
+        }
+
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([

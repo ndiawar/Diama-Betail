@@ -526,10 +526,13 @@ const Vaches = () => {
                             <button 
                                 onClick={closeModals}
                                 className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1"
+                                title="Fermer la modal des détails"
+                                aria-label="Fermer la modal de détails de la vache"
                             >
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                     <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
+                                <span className="sr-only">Fermer</span>
                             </button>
                         </div>
                         
@@ -613,50 +616,67 @@ const Vaches = () => {
                             <button 
                                 onClick={closeModals}
                                 className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1"
+                                title="Fermer la modal de modification"
+                                aria-label="Fermer la modal de modification de la vache"
                             >
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                     <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
+                                <span className="sr-only">Fermer</span>
                             </button>
                         </div>
                         
                         <div className="flex-1 overflow-y-auto p-6">
                             <form className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium mb-1">Nom</label>
+                                <label htmlFor="edit-nom" className="block text-sm font-medium mb-1">Nom</label>
                                 <input 
+                                    id="edit-nom"
                                     type="text" 
                                     className="form-input w-full" 
                                     value={editForm.nom}
                                     onChange={(e) => setEditForm({...editForm, nom: e.target.value})}
+                                    title="Nom de la vache"
+                                    placeholder="Entrer le nom de la vache"
+                                    aria-label="Nom de la vache"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">Race</label>
+                                <label htmlFor="edit-race" className="block text-sm font-medium mb-1">Race</label>
                                 <input 
+                                    id="edit-race"
                                     type="text" 
                                     className="form-input w-full" 
                                     value={editForm.race}
                                     onChange={(e) => setEditForm({...editForm, race: e.target.value})}
+                                    title="Race de la vache"
+                                    placeholder="Entrer la race de la vache"
+                                    aria-label="Race de la vache"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">Sexe</label>
+                                <label htmlFor="edit-sexe" className="block text-sm font-medium mb-1">Sexe</label>
                                 <select 
+                                    id="edit-sexe"
                                     className="form-select w-full" 
                                     value={editForm.sexe}
                                     onChange={(e) => setEditForm({...editForm, sexe: e.target.value})}
+                                    title="Sexe de la vache"
+                                    aria-label="Sexe de la vache"
                                 >
                                     <option value="Femelle">Femelle</option>
                                     <option value="Male">Male</option>
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">Statut Santé</label>
+                                <label htmlFor="edit-statut" className="block text-sm font-medium mb-1">Statut Santé</label>
                                 <select 
+                                    id="edit-statut"
                                     className="form-select w-full" 
                                     value={editForm.statut_sante}
                                     onChange={(e) => setEditForm({...editForm, statut_sante: e.target.value})}
+                                    title="Statut de santé de la vache"
+                                    aria-label="Statut de santé de la vache"
                                 >
                                     <option value="bonne">Bonne</option>
                                     <option value="attention">Attention</option>
@@ -664,40 +684,55 @@ const Vaches = () => {
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">Poids (kg)</label>
+                                <label htmlFor="edit-poids" className="block text-sm font-medium mb-1">Poids (kg)</label>
                                 <input 
+                                    id="edit-poids"
                                     type="number" 
                                     className="form-input w-full" 
                                     value={editForm.poids}
                                     onChange={(e) => setEditForm({...editForm, poids: parseFloat(e.target.value) || 0})}
+                                    title="Poids de la vache en kilogrammes"
+                                    placeholder="Entrer le poids en kg"
+                                    aria-label="Poids de la vache en kilogrammes"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">Température (°C)</label>
+                                <label htmlFor="edit-temperature" className="block text-sm font-medium mb-1">Température (°C)</label>
                                 <input 
+                                    id="edit-temperature"
                                     type="number" 
                                     step="0.1"
                                     className="form-input w-full" 
                                     value={editForm.temperature}
                                     onChange={(e) => setEditForm({...editForm, temperature: parseFloat(e.target.value) || 0})}
+                                    title="Température corporelle de la vache en degrés Celsius"
+                                    placeholder="Entrer la température"
+                                    aria-label="Température corporelle de la vache"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">Production de Lait (L/jour)</label>
+                                <label htmlFor="edit-production" className="block text-sm font-medium mb-1">Production de Lait (L/jour)</label>
                                 <input 
+                                    id="edit-production"
                                     type="number" 
                                     step="0.1"
                                     className="form-input w-full" 
                                     value={editForm.production_lait}
                                     onChange={(e) => setEditForm({...editForm, production_lait: parseFloat(e.target.value) || 0})}
+                                    title="Production de lait en litres par jour"
+                                    placeholder="Entrer la production quotidienne"
+                                    aria-label="Production de lait quotidienne"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">GPS Actif</label>
+                                <label htmlFor="edit-gps" className="block text-sm font-medium mb-1">GPS Actif</label>
                                 <select 
+                                    id="edit-gps"
                                     className="form-select w-full" 
                                     value={editForm.gps_actif ? 'true' : 'false'}
                                     onChange={(e) => setEditForm({...editForm, gps_actif: e.target.value === 'true'})}
+                                    title="Statut du GPS de la vache"
+                                    aria-label="Statut du GPS de la vache"
                                 >
                                     <option value="true">Actif</option>
                                     <option value="false">Inactif</option>
@@ -787,53 +822,70 @@ const Vaches = () => {
                             <button 
                                 onClick={closeModals}
                                 className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1"
+                                title="Fermer la modal d'ajout"
+                                aria-label="Fermer la modal d'ajout de vache"
                             >
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                     <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
+                                <span className="sr-only">Fermer</span>
                             </button>
                         </div>
                         
                         <div className="flex-1 overflow-y-auto p-6">
                             <form className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium mb-1">Nom *</label>
+                                <label htmlFor="add-nom" className="block text-sm font-medium mb-1">Nom *</label>
                                 <input 
+                                    id="add-nom"
                                     type="text" 
                                     className="form-input w-full" 
                                     value={addForm.nom}
                                     onChange={(e) => setAddForm({...addForm, nom: e.target.value})}
                                     required
+                                    title="Nom de la nouvelle vache"
+                                    placeholder="Entrer le nom de la vache"
+                                    aria-label="Nom de la nouvelle vache"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">Race</label>
+                                <label htmlFor="add-race" className="block text-sm font-medium mb-1">Race</label>
                                 <input 
+                                    id="add-race"
                                     type="text" 
                                     className="form-input w-full" 
                                     value={addForm.race}
                                     onChange={(e) => setAddForm({...addForm, race: e.target.value})}
+                                    title="Race de la nouvelle vache"
+                                    placeholder="Entrer la race de la vache"
+                                    aria-label="Race de la nouvelle vache"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">Sexe *</label>
+                                <label htmlFor="add-sexe" className="block text-sm font-medium mb-1">Sexe *</label>
                                 <select 
+                                    id="add-sexe"
                                     className="form-select w-full" 
                                     value={addForm.sexe}
                                     onChange={(e) => setAddForm({...addForm, sexe: e.target.value})}
                                     required
+                                    title="Sexe de la nouvelle vache"
+                                    aria-label="Sexe de la nouvelle vache"
                                 >
                                     <option value="Femelle">Femelle</option>
                                     <option value="Male">Male</option>
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">Statut Santé *</label>
+                                <label htmlFor="add-statut" className="block text-sm font-medium mb-1">Statut Santé *</label>
                                 <select 
+                                    id="add-statut"
                                     className="form-select w-full" 
                                     value={addForm.statut_sante}
                                     onChange={(e) => setAddForm({...addForm, statut_sante: e.target.value})}
                                     required
+                                    title="Statut de santé de la nouvelle vache"
+                                    aria-label="Statut de santé de la nouvelle vache"
                                 >
                                     <option value="bonne">Bonne</option>
                                     <option value="attention">Attention</option>
@@ -841,35 +893,47 @@ const Vaches = () => {
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">Poids (kg) *</label>
+                                <label htmlFor="add-poids" className="block text-sm font-medium mb-1">Poids (kg) *</label>
                                 <input 
+                                    id="add-poids"
                                     type="number" 
                                     className="form-input w-full" 
                                     value={addForm.poids}
                                     onChange={(e) => setAddForm({...addForm, poids: parseFloat(e.target.value) || 0})}
                                     required
+                                    title="Poids de la nouvelle vache en kilogrammes"
+                                    placeholder="Entrer le poids en kg"
+                                    aria-label="Poids de la nouvelle vache en kilogrammes"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">Température (°C) *</label>
+                                <label htmlFor="add-temperature" className="block text-sm font-medium mb-1">Température (°C) *</label>
                                 <input 
+                                    id="add-temperature"
                                     type="number" 
                                     step="0.1"
                                     className="form-input w-full" 
                                     value={addForm.temperature}
                                     onChange={(e) => setAddForm({...addForm, temperature: parseFloat(e.target.value) || 0})}
                                     required
+                                    title="Température corporelle de la nouvelle vache en degrés Celsius"
+                                    placeholder="Entrer la température"
+                                    aria-label="Température corporelle de la nouvelle vache"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">Production de Lait (L/jour) *</label>
+                                <label htmlFor="add-production" className="block text-sm font-medium mb-1">Production de Lait (L/jour) *</label>
                                 <input 
+                                    id="add-production"
                                     type="number" 
                                     step="0.1"
                                     className="form-input w-full" 
                                     value={addForm.production_lait}
                                     onChange={(e) => setAddForm({...addForm, production_lait: parseFloat(e.target.value) || 0})}
                                     required
+                                    title="Production de lait en litres par jour"
+                                    placeholder="Entrer la production quotidienne"
+                                    aria-label="Production de lait quotidienne"
                                 />
                             </div>
                             <div>
