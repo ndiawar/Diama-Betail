@@ -5,7 +5,7 @@ import ReactApexChart from 'react-apexcharts';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../store';
 import { setPageTitle } from '../store/themeConfigSlice';
-import { apiService, Vache, Stats } from '../services/api';
+import api, { Vache, Stats } from '../services/api';
 import { websocketService } from '../services/websocket';
 
 const Index = () => {
@@ -51,8 +51,8 @@ const Index = () => {
             
             // Charger les vaches et les statistiques en parallèle
             const [vachesResponse, statsResponse] = await Promise.all([
-                apiService.getVaches(),
-                apiService.getStats()
+                api.getVaches(),
+                api.getStats()
             ]);
             
             setVaches(vachesResponse.data);

@@ -18,6 +18,7 @@
 ### 2. Configuration automatique
 
 Le fichier `render.yaml` configure automatiquement :
+
 - **Base de données PostgreSQL**
 - **Service backend Laravel**
 - **Service frontend statique**
@@ -25,6 +26,7 @@ Le fichier `render.yaml` configure automatiquement :
 ## 📁 Fichiers de configuration
 
 ### `render.yaml`
+
 ```yaml
 databases:
   - name: diama-db
@@ -49,12 +51,14 @@ services:
 ```
 
 ### `.render-buildpacks`
+
 ```
 heroku/php
 heroku/nodejs
 ```
 
 ### `extensions.txt`
+
 ```
 pdo_pgsql
 pgsql
@@ -81,6 +85,7 @@ git push origin main
 ### 3. Configuration des variables d'environnement
 
 Render configurera automatiquement :
+
 - **DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD** (depuis la base de données)
 - **APP_KEY** (généré automatiquement)
 - **APP_URL** (URL du service)
@@ -111,26 +116,31 @@ Après le déploiement, vous aurez :
 ## 🔧 Configuration frontend
 
 Le frontend sera automatiquement configuré avec :
+
 - **VITE_API_URL** : URL du backend
 - **VITE_PUSHER_*** : Configuration WebSocket
 
 ## 📊 Monitoring
 
 ### Logs
+
 - **Backend logs** : Dashboard Render → diama-backend → Logs
 - **Frontend logs** : Dashboard Render → diama-frontend → Logs
 
 ### Métriques
+
 - **Performance** : Dashboard Render → Métriques
 - **Base de données** : Dashboard Render → diama-db → Métriques
 
 ## 🔄 Mises à jour
 
 ### Déploiement automatique
+
 - Chaque push sur `main` déclenche un nouveau déploiement
 - Render détecte automatiquement les changements
 
 ### Déploiement manuel
+
 1. **Dashboard Render** → Service → "Manual Deploy"
 2. **Sélectionnez la branche** → "Deploy"
 
@@ -139,6 +149,7 @@ Le frontend sera automatiquement configuré avec :
 ### Erreurs courantes
 
 #### 1. Build échoue
+
 ```bash
 # Vérifiez les logs de build
 # Assurez-vous que composer.json est correct
@@ -146,12 +157,14 @@ Le frontend sera automatiquement configuré avec :
 ```
 
 #### 2. Migration échoue
+
 ```bash
 # Vérifiez la connexion à la base de données
 # Assurez-vous que les migrations sont à jour
 ```
 
 #### 3. Frontend ne charge pas
+
 ```bash
 # Vérifiez VITE_API_URL
 # Assurez-vous que le backend fonctionne
@@ -173,17 +186,20 @@ render env --service diama-backend
 ## 🔒 Sécurité
 
 ### Variables sensibles
+
 - **Ne jamais commiter** `.env` ou `env.render.example`
 - **Utiliser les variables d'environnement Render**
 - **Changer les clés par défaut** en production
 
 ### SSL/HTTPS
+
 - **Automatiquement configuré** par Render
 - **Certificats gérés** par Render
 
 ## 📈 Optimisations
 
 ### Performance
+
 ```bash
 # Cache Laravel
 php artisan config:cache
@@ -195,6 +211,7 @@ composer install --optimize-autoloader --no-dev
 ```
 
 ### Base de données
+
 - **Index** sur les colonnes fréquemment utilisées
 - **Requêtes optimisées** dans les contrôleurs
 - **Pagination** pour les grandes listes
@@ -216,4 +233,4 @@ composer install --optimize-autoloader --no-dev
 3. **Attendez le déploiement** (5-10 minutes)
 4. **Accédez à votre application** via les URLs générées
 
-**Votre application DIAMA sera en ligne !** 🐄✨ 
+**Votre application DIAMA sera en ligne !** 🐄✨

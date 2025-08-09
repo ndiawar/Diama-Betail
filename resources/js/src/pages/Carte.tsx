@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { apiService, Vache } from '../services/api';
+import api, { Vache } from '../services/api';
 import { websocketService } from '../services/websocket';
 
 // Fonction pour formater les dates
@@ -135,7 +135,7 @@ const Carte = () => {
     const loadVachesData = async () => {
         try {
             setLoading(true);
-            const response = await apiService.getVaches();
+            const response = await api.getVaches();
             setVaches(response.data);
         } catch (error) {
             console.error('Erreur chargement vaches:', error);

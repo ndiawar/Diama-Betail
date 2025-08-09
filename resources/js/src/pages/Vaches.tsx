@@ -7,7 +7,7 @@ import 'tippy.js/dist/tippy.css';
 import { setPageTitle } from '../store/themeConfigSlice';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { apiService, Vache } from '../services/api';
+import api, { Vache } from '../services/api';
 import { websocketService } from '../services/websocket';
 import Notification from '../components/Notification';
 import ActionMenu from '../components/ActionMenu';
@@ -114,7 +114,7 @@ const Vaches = () => {
     const loadVachesData = async () => {
         try {
             setLoading(true);
-            const response = await apiService.getVaches();
+            const response = await api.getVaches();
             setVaches(response.data);
             setInitialRecords(response.data);
             setRecordsData(response.data.slice(0, pageSize));
@@ -253,7 +253,7 @@ const Vaches = () => {
         
         setIsDeleting(true);
         try {
-            await apiService.deleteVache(selectedVache.id);
+            await api.deleteVache(selectedVache.id);
             setShowDeleteModal(false);
             setSelectedVache(null);
             loadVachesData(); // Recharger les données
@@ -307,7 +307,7 @@ const Vaches = () => {
         
         setIsSaving(true);
         try {
-            await apiService.updateVache(selectedVache.id, editForm);
+            await api.updateVache(selectedVache.id, editForm);
             setShowEditModal(false);
             setSelectedVache(null);
             loadVachesData(); // Recharger les données
@@ -329,7 +329,7 @@ const Vaches = () => {
     const handleAddVache = async () => {
         setIsSaving(true);
         try {
-            await apiService.createVache(addForm);
+            await api.createVache(addForm);
             setShowAddModal(false);
             loadVachesData(); // Recharger les données
             setNotification({

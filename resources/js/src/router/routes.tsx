@@ -4,6 +4,7 @@ import { lazy } from 'react';
 const Index = lazy(() => import('../pages/Index'));
 const Vaches = lazy(() => import('../pages/Vaches'));
 const Carte = lazy(() => import('../pages/Carte'));
+const HistoriquePositions = lazy(() => import('../pages/HistoriquePositions'));
 
 const routes = [
     // dashboard
@@ -22,6 +23,12 @@ const routes = [
     {
         path: '/carte',
         element: <Carte />,
+        layout: 'default',
+    },
+    // historique positions
+    {
+        path: '/historique-positions',
+        element: <HistoriquePositions />,
         layout: 'default',
     },
 ];

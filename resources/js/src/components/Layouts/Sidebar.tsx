@@ -120,6 +120,35 @@ const Sidebar = () => {
                                     </div>
                                 </NavLink>
                             </li>
+
+                            {/* Menu Historique Positions */}
+                            <li className="nav-item">
+                                <NavLink to="/historique-positions" className="group">
+                                    <div className="flex items-center">
+                                        <svg className="group-hover:!text-primary shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                opacity="0.5"
+                                                d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                                fill="currentColor"
+                                            />
+                                            <path
+                                                d="M12 8V12L14.5 14.5"
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                            />
+                                            <path
+                                                d="M12 1V3M12 21V23M1 12H3M21 12H23"
+                                                stroke="currentColor"
+                                                strokeWidth="1.5"
+                                                strokeLinecap="round"
+                                            />
+                                        </svg>
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">Historique Positions</span>
+                                    </div>
+                                </NavLink>
+                            </li>
                         </ul>
                     </PerfectScrollbar>
                 </div>

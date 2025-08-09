@@ -68,6 +68,64 @@ export interface Stats {
     derniere_mise_a_jour: string;
 }
 
+export interface Position {
+    id: number;
+    vache: {
+        id: number;
+        nom: string;
+        id_rfid: string;
+    };
+    latitude: number;
+    longitude: number;
+    altitude?: number;
+    timestamp: string;
+}
+
+export interface HistoriqueStats {
+    total_positions: number;
+    vaches_trackees: number;
+    premiere_position: string;
+    derniere_position: string;
+}
+
+export interface PositionHistoryResponse {
+    success: boolean;
+    data: Position[];
+    pagination: {
+        current_page: number;
+        total_pages: number;
+        per_page: number;
+        total: number;
+        has_next: boolean;
+        has_previous: boolean;
+    };
+    stats: HistoriqueStats;
+    filters: any;
+}
+
+export interface VachePositionHistoryResponse {
+    success: boolean;
+    vache: {
+        id: number;
+        nom: string;
+        id_rfid: string;
+    };
+    positions: Position[];
+    stats: {
+        total_positions: number;
+        distance_parcourue_km: number;
+        premiere_position: string;
+        derniere_position: string;
+        zone_activite: {
+            lat_min: number;
+            lat_max: number;
+            lng_min: number;
+            lng_max: number;
+        };
+    };
+    filters: any;
+}
+
 export interface ApiResponse<T> {
     success: boolean;
     data: T;
@@ -172,6 +230,49 @@ class ApiService {
             throw error;
         }
     }
+
+    // Récupérer l'historique des positions (toutes les vaches)
+    async getPositionHistory(filters?: any): Promise<PositionHistoryResponse> {
+        try {
+            const queryParams = new URLSearchParams();
+            
+            if (filters) {
+                Object.keys(filters).forEach(key => {
+                    if (filters[key] !== undefined && filters[key] !== null && filters[key] !== '') {
+                        queryParams.append(key, filters[key].toString());
+                    }
+                });
+            }
+            
+            const url = `/vaches/positions/history${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
+            return this.request<PositionHistoryResponse>(url);
+        } catch (error) {
+            console.error('Get position history failed:', error);
+            throw error;
+        }
+    }
+
+    // Récupérer l'historique des positions pour une vache spécifique
+    async getVachePositionHistory(vacheId: number, filters?: any): Promise<VachePositionHistoryResponse> {
+        try {
+            const queryParams = new URLSearchParams();
+            
+            if (filters) {
+                Object.keys(filters).forEach(key => {
+                    if (filters[key] !== undefined && filters[key] !== null && filters[key] !== '') {
+                        queryParams.append(key, filters[key].toString());
+                    }
+                });
+            }
+            
+            const url = `/vaches/${vacheId}/positions/history${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
+            return this.request<VachePositionHistoryResponse>(url);
+        } catch (error) {
+            console.error('Get vache position history failed:', error);
+            throw error;
+        }
+    }
 }
 
-export const apiService = new ApiService(); 
+const api = new ApiService();
+export default api; 

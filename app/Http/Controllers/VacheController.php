@@ -414,6 +414,193 @@ class VacheController extends Controller
     }
 
     /**
+     * Récupérer l'historique des positions
+     */
+    public function positionHistory(Request $request): JsonResponse
+    {
+        try {
+            // Validation des paramètres
+            $validated = $request->validate([
+                'vache_id' => 'nullable|exists:vaches,id',
+                'start_date' => 'nullable|date',
+                'end_date' => 'nullable|date|after_or_equal:start_date',
+                'limit' => 'nullable|integer|min:1|max:1000',
+                'page' => 'nullable|integer|min:1',
+            ]);
+
+            $query = \App\Models\VachePosition::with('vache:id,nom,id_rfid')
+                ->orderBy('timestamp', 'desc');
+
+            // Filtrer par vache spécifique
+            if (isset($validated['vache_id'])) {
+                $query->where('vache_id', $validated['vache_id']);
+            }
+
+            // Filtrer par période
+            if (isset($validated['start_date']) && isset($validated['end_date'])) {
+                $query->betweenDates($validated['start_date'], $validated['end_date']);
+            } elseif (isset($validated['start_date'])) {
+                $query->where('timestamp', '>=', $validated['start_date']);
+            } elseif (isset($validated['end_date'])) {
+                $query->where('timestamp', '<=', $validated['end_date']);
+            } else {
+                // Par défaut, historique des 30 derniers jours
+                $query->where('timestamp', '>=', now()->subDays(30));
+            }
+
+            // Pagination
+            $limit = $validated['limit'] ?? 50;
+            $page = $validated['page'] ?? 1;
+            
+            $positions = $query->paginate($limit, ['*'], 'page', $page);
+
+            // Statistiques
+            $stats = [
+                'total_positions' => $positions->total(),
+                'vaches_trackees' => \App\Models\VachePosition::distinct('vache_id')->count(),
+                'premiere_position' => \App\Models\VachePosition::min('timestamp'),
+                'derniere_position' => \App\Models\VachePosition::max('timestamp'),
+            ];
+
+            return response()->json([
+                'success' => true,
+                'data' => $positions->items(),
+                'pagination' => [
+                    'current_page' => $positions->currentPage(),
+                    'total_pages' => $positions->lastPage(),
+                    'per_page' => $positions->perPage(),
+                    'total' => $positions->total(),
+                    'has_next' => $positions->hasMorePages(),
+                    'has_previous' => $positions->currentPage() > 1,
+                ],
+                'stats' => $stats,
+                'filters' => $validated
+            ]);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Paramètres invalides',
+                'errors' => $e->errors()
+            ], 422);
+
+        } catch (\Exception $e) {
+            Log::error('Erreur récupération historique positions', [
+                'message' => $e->getMessage(),
+                'filters' => $request->all()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur récupération historique',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Récupérer l'historique des positions pour une vache spécifique
+     */
+    public function vachePositionHistory(string $id, Request $request): JsonResponse
+    {
+        try {
+            $vache = Vache::findOrFail($id);
+
+            // Validation des paramètres
+            $validated = $request->validate([
+                'start_date' => 'nullable|date',
+                'end_date' => 'nullable|date|after_or_equal:start_date',
+                'limit' => 'nullable|integer|min:1|max:1000',
+            ]);
+
+            $query = $vache->positions()->orderBy('timestamp', 'desc');
+
+            // Filtrer par période
+            if (isset($validated['start_date']) && isset($validated['end_date'])) {
+                $query->betweenDates($validated['start_date'], $validated['end_date']);
+            } elseif (isset($validated['start_date'])) {
+                $query->where('timestamp', '>=', $validated['start_date']);
+            } elseif (isset($validated['end_date'])) {
+                $query->where('timestamp', '<=', $validated['end_date']);
+            } else {
+                // Par défaut, historique des 7 derniers jours
+                $query->recent(168); // 7 jours = 168 heures
+            }
+
+            $limit = $validated['limit'] ?? 100;
+            $positions = $query->limit($limit)->get();
+
+            // Calculer la distance parcourue
+            $distanceParcourue = 0;
+            for ($i = 1; $i < count($positions); $i++) {
+                $distanceParcourue += $this->calculateDistance(
+                    $positions[$i-1]->latitude, $positions[$i-1]->longitude,
+                    $positions[$i]->latitude, $positions[$i]->longitude
+                );
+            }
+
+            $stats = [
+                'total_positions' => $positions->count(),
+                'distance_parcourue_km' => round($distanceParcourue, 2),
+                'premiere_position' => $positions->last()?->timestamp,
+                'derniere_position' => $positions->first()?->timestamp,
+                'zone_activite' => [
+                    'lat_min' => $positions->min('latitude'),
+                    'lat_max' => $positions->max('latitude'),
+                    'lng_min' => $positions->min('longitude'),
+                    'lng_max' => $positions->max('longitude'),
+                ]
+            ];
+
+            return response()->json([
+                'success' => true,
+                'vache' => [
+                    'id' => $vache->id,
+                    'nom' => $vache->nom,
+                    'id_rfid' => $vache->id_rfid
+                ],
+                'positions' => $positions,
+                'stats' => $stats,
+                'filters' => $validated
+            ]);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Vache non trouvée'
+            ], 404);
+
+        } catch (\Exception $e) {
+            Log::error('Erreur historique positions vache', [
+                'vache_id' => $id,
+                'message' => $e->getMessage()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur récupération historique',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Calculer la distance entre deux points GPS (formule de Haversine)
+     */
+    private function calculateDistance($lat1, $lon1, $lat2, $lon2): float
+    {
+        $earthRadius = 6371; // Rayon de la Terre en km
+
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+
+        $a = sin($dLat/2) * sin($dLat/2) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLon/2) * sin($dLon/2);
+        $c = 2 * atan2(sqrt($a), sqrt(1-$a));
+
+        return $earthRadius * $c;
+    }
+
+    /**
      * Statut de santé du système
      */
     public function health(): JsonResponse

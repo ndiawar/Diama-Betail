@@ -6,17 +6,17 @@
 #include <time.h>
 
 // Configuration WiFi
-const char* ssid = "Sanco";
-const char* password = "scopsSanco;79Pi/";
+const char* ssid = "Diama’s phone";
+const char* password = "Diama’s phone";
 
 // Configuration serveur DIAMA
-const char* serverUrl = "http://192.168.1.17:8000/api/vaches/update";
+const char* serverUrl = "https://diama-backend.onrender.com/api/vaches/update";
 
 // Configuration GPS
 const bool USE_FIXED_COORDINATES = true;
-const float FIXED_LAT = 14.7305975;
-const float FIXED_LNG = -17.321913;
-const float FIXED_ALT = 7.6;
+const float FIXED_LAT = 14.7192496; // Latitude exacte de l'Institut Privé de Gestion, Dakar
+const float FIXED_LNG = -17.4616071; // Longitude exacte de l'Institut Privé de Gestion, Dakar
+const float FIXED_ALT = 25.0; // Altitude approximative de Dakar
 
 // GPS
 TinyGPSPlus gps;
@@ -210,4 +210,4 @@ void sendToDiamaServer() {
   }
   
   http.end();
-} 
+}

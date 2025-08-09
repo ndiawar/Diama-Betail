@@ -28,6 +28,11 @@ Route::prefix('vaches')->group(function () {
     Route::get('/', [VacheController::class, 'index']);
     Route::post('/', [VacheController::class, 'store']); // Créer
     Route::get('/stats', [VacheController::class, 'stats']);
+    
+    // Routes pour l'historique des positions
+    Route::get('/positions/history', [VacheController::class, 'positionHistory']);
+    Route::get('/{id}/positions/history', [VacheController::class, 'vachePositionHistory']);
+    
     Route::get('/{id}', [VacheController::class, 'show']);
     Route::put('/{id}', [VacheController::class, 'update']); // Modifier
     Route::delete('/{id}', [VacheController::class, 'destroy']);
