@@ -54,7 +54,7 @@ const HistoriquePositions = () => {
 
     // Filtres
     const [filters, setFilters] = useState<FilterData>({
-        limit: 50,
+        limit: 10,
         page: 1
     });
 
@@ -103,7 +103,7 @@ const HistoriquePositions = () => {
     const applyFilters = () => {
         const newFilters: FilterData = {
             page: 1,
-            limit: 50
+            limit: 10
         };
 
         if (selectedVache) {
@@ -123,7 +123,7 @@ const HistoriquePositions = () => {
         setSelectedVache('');
         setStartDate('');
         setEndDate('');
-        setFilters({ limit: 50, page: 1 });
+        setFilters({ limit: 10, page: 1 });
     };
 
     const handlePageChange = (page: number) => {
@@ -281,6 +281,22 @@ const HistoriquePositions = () => {
                     </div>
 
                     <div className="flex items-end space-x-2">
+                        <div>
+                            <label htmlFor="elements-per-page" className="block text-sm font-medium text-gray-700 mb-2">Éléments/page</label>
+                            <select
+                                id="elements-per-page"
+                                value={filters.limit}
+                                onChange={(e) => setFilters(prev => ({ ...prev, limit: parseInt(e.target.value), page: 1 }))}
+                                className="form-select w-full"
+                                title="Nombre d'éléments par page"
+                                aria-label="Sélectionner le nombre d'éléments par page"
+                            >
+                                <option value={10}>10</option>
+                                <option value={25}>25</option>
+                                <option value={50}>50</option>
+                                <option value={100}>100</option>
+                            </select>
+                        </div>
                         <button
                             onClick={applyFilters}
                             className="btn btn-primary flex-1"
